@@ -5,7 +5,7 @@ import {Navbar} from './src/Navbar'
 export default function App() {
   return (
     <View style={styles.container}>
-      <Navbar title="Todo App for my wife"></Navbar>
+      <Navbar title="Todo App"></Navbar>
     </View>
   );
 }
