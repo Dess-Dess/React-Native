@@ -1,12 +1,33 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
+import * as Font from "expo-font";
+import {AppLoading} from 'expo'
 import { Navbar } from "./src/components/Navbar";
 import { Mainscreen } from "./src/screens/Mainscreen";
 import { Todoscreen } from "./src/screens/Todoscreen";
 
+async function loadApplication() {
+  await Font.loadAsync({
+    "roboto-regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "roboto-bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
+}
+
 export default function App() {
+  const [isReady, setIsReady] = useState(false)
   const [todoId, setTodoId] = useState(null);
-  const [todoList, setTodos] = useState([]);
+  const [todoList, setTodos] = useState([
+    /*  { id: "1", title: "Выучить React Native" },
+    { id: "2", title: "Написать приложение" }, */
+  ]);
+
+  if(!isReady){
+    return(<AppLoading 
+    startAsync = {loadApplication}
+    onError={err => console.log(err)}
+    onFinish={()=> setIsReady(true)}
+    />)
+  }
 
   const addTodo = (title) => {
     const newTodo = {
@@ -20,7 +41,37 @@ export default function App() {
   };
 
   const removeTodoItem = (id) => {
-    setTodos((todoList) => todoList.filter((todo) => todo.id !== id));
+    const todo = todoList.find((t) => t.id === id);
+    Alert.alert(
+      "Удаление элемента",
+      `Вы уверены, что хотите удалить "${todo.title}"?`,
+      [
+        {
+          text: "Отмена",
+          style: "cancel",
+        },
+        {
+          text: "Удалить",
+          style: "destructive",
+          onPress: () => {
+            setTodoId(null);
+            setTodos((todoList) => todoList.filter((todo) => todo.id !== id));
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const updateTodo = (id, title) => {
+    setTodos((old) =>
+      old.map((todo) => {
+        if (todo.id === id) {
+          todo.title = title;
+        }
+        return todo;
+      })
+    );
   };
 
   let content = (
@@ -33,8 +84,16 @@ export default function App() {
   );
 
   if (todoId) {
-    const todoItem = todoList.find(todo => todo.id === todoId)
-    content = <Todoscreen todoTitle={todoItem.title} goBack={()=>setTodoId(null)} />;
+    const todoItem = todoList.find((todo) => todo.id === todoId);
+
+    content = (
+      <Todoscreen
+        todo={todoItem}
+        goBack={() => setTodoId(null)}
+        removeTodoItem={() => removeTodoItem(todoItem.id)}
+        onSave={updateTodo}
+      />
+    );
   }
 
   return (
@@ -47,6 +106,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 });
