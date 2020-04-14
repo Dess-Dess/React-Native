@@ -34,7 +34,7 @@ export const Todoscreen = ({ goBack, todo, removeTodoItem, onSave }) => {
         <View style={styles.button}>
           <AppButton onPress={goBack} backgroundColor={THEME.GREY_COLOR}>
             <AntDesign name="back" size={20} />
-          </AppButton>
+          </AppButton> 
         </View>
         <View style={styles.button}>
           <AppButton
