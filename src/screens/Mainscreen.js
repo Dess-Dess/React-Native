@@ -1,7 +1,8 @@
-import React from "react";
-import { StyleSheet, View, FlatList, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, FlatList, Image, Dimensions } from "react-native";
 import { AddTodo } from "../components/AddTodo";
 import { ToDoItem } from "../components/ToDoItem";
+import { THEME } from "../theme";
 
 export const Mainscreen = ({
   addTodo,
@@ -9,15 +10,42 @@ export const Mainscreen = ({
   removeTodoItem,
   openTodoItem,
 }) => {
+  const [deviceWidth, setDeviceWidth] = useState(
+    Dimensions.get("window").width - THEME.PADDING * 2
+  );
+
+  const [deviceHeight, setDeviceHeight] = useState(
+    Dimensions.get("window").height - THEME.HEADER
+  );
+
+  useEffect(() => {
+    const update = () => {
+      const width = Dimensions.get("window").width - THEME.PADDING * 2;
+      setDeviceWidth(width);
+      const height = Dimensions.get("window").height - THEME.HEADER;
+      setDeviceHeight(height);
+    };
+    Dimensions.addEventListener("change", update);
+
+    return () => {
+      Dimensions.removeEventListener("change", update);
+    };
+  });
+
   let content = (
-    <FlatList
-      style={styles.container}
-      keyExtractor={(item) => item.id}
-      data={todoList}
-      renderItem={({ item }) => (
-        <ToDoItem todo={item} onRemove={removeTodoItem} onOpen={openTodoItem} />
-      )}
-    />
+    <View style={{ width: deviceWidth, height: deviceHeight }}>
+      <FlatList
+        keyExtractor={(item) => item.id}
+        data={todoList}
+        renderItem={({ item }) => (
+          <ToDoItem
+            todo={item}
+            onRemove={removeTodoItem}
+            onOpen={openTodoItem}
+          />
+        )}
+      />
+    </View>
   );
 
   if (todoList.length === 0) {
@@ -38,10 +66,8 @@ export const Mainscreen = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 325,
-  },
   imageWrap: {
     alignItems: "center",
     justifyContent: "center",

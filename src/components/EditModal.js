@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { THEME } from "../theme";
+import { AppButton } from "../ui/AppButton";
 
 export const EditModal = ({ isVisible, onCancel, todoTitle, onSave }) => {
   const [title, setTitle] = useState(todoTitle);
@@ -28,6 +29,7 @@ export const EditModal = ({ isVisible, onCancel, todoTitle, onSave }) => {
   return (
     <Modal visible={isVisible} animationType="slide">
       <View style={styles.wrap}>
+        {/* <AppText> */}
         <TextInput
           style={styles.textInput}
           placeholder="Введите название дела..."
@@ -35,13 +37,12 @@ export const EditModal = ({ isVisible, onCancel, todoTitle, onSave }) => {
           value={title}
           onChangeText={setTitle}
         ></TextInput>
+        {/* </AppText> */}
         <View style={styles.buttons}>
-          <Button
-            title="Отменить"
-            onPress={onCancel}
-            color={THEME.DANGER_COLOR}
-          />
-          <Button title="Сохранить" onPress={SaveTitle} />
+          <AppButton onPress={onCancel} backgroundColor={THEME.DANGER_COLOR}>
+            Отменить
+          </AppButton>
+          <AppButton onPress={SaveTitle}>Сохранить</AppButton>
         </View>
       </View>
     </Modal>
@@ -54,6 +55,8 @@ const styles = StyleSheet.create({
     borderBottomColor: THEME.MAIN_COLOR,
     borderBottomWidth: 2,
     width: "80%",
+    fontFamily: "porcelain-regular",
+    fontSize: 24,
   },
   wrap: {
     flex: 1,

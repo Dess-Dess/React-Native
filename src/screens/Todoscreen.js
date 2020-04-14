@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import { THEME } from "../theme";
 import { AppCard } from "../ui/AppCard";
 import { EditModal } from "../components/EditModal";
+import { AppTextBold } from "../ui/AppTextBold";
+import { AppButton } from "../ui/AppButton";
 
 export const Todoscreen = ({ goBack, todo, removeTodoItem, onSave }) => {
   const [isVisible, setVisible] = useState(false);
-  const SaveHandler = (title) => {    
+  const SaveHandler = (title) => {
     onSave(todo.id, title);
     setVisible(false);
   };
@@ -20,19 +23,26 @@ export const Todoscreen = ({ goBack, todo, removeTodoItem, onSave }) => {
       />
 
       <AppCard style={styles.card}>
-        <Text style={styles.title}>{todo.title}</Text>
-        <Button title="Ред." onPress={() => setVisible(true)} />
+        <AppTextBold>
+          <Text style={styles.title}>{todo.title}</Text>
+        </AppTextBold>
+        <AppButton onPress={() => setVisible(true)}>
+          <FontAwesome name="edit" size={20} />
+        </AppButton>
       </AppCard>
       <View style={styles.buttons}>
         <View style={styles.button}>
-          <Button title="Назад" onPress={goBack} color={THEME.GREY_COLOR} />
+          <AppButton onPress={goBack} backgroundColor={THEME.GREY_COLOR}>
+            <AntDesign name="back" size={20} />
+          </AppButton>
         </View>
         <View style={styles.button}>
-          <Button
-            title="Удалить"
-            color={THEME.DANGER_COLOR}
+          <AppButton
+            backgroundColor={THEME.DANGER_COLOR}
             onPress={removeTodoItem}
-          />
+          >
+            <FontAwesome name="remove" size={20} />
+          </AppButton>
         </View>
       </View>
     </View>
@@ -45,10 +55,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    width: "40%",
+    width: Dimensions.get('window').width/3,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
   },
   card: {
     marginBottom: 20,
