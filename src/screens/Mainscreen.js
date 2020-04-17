@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, FlatList, Image, Dimensions } from "react-native";
 import { AddTodo } from "../components/AddTodo";
 import { ToDoItem } from "../components/ToDoItem";
 import { THEME } from "../theme";
+import { TodoContext } from "../context/todo/todoContext";
+import { ScreenContext } from "../context/screen/screenContext";
 
-export const Mainscreen = ({
-  addTodo,
-  todoList,
-  removeTodoItem,
-  openTodoItem,
-}) => {
+export const Mainscreen = () => {
+  const { addTodo, todoList, removeTodoItem } = useContext(TodoContext);
+  const { change_screen } = useContext(ScreenContext);
+
   const [deviceWidth, setDeviceWidth] = useState(
     Dimensions.get("window").width - THEME.PADDING * 2
   );
@@ -41,7 +41,7 @@ export const Mainscreen = ({
           <ToDoItem
             todo={item}
             onRemove={removeTodoItem}
-            onOpen={openTodoItem}
+            onOpen={change_screen}
           />
         )}
       />

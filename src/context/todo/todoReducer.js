@@ -1,33 +1,27 @@
 import { ADD_TODO, REMOVE_TODO, UPDATE_TODO } from "../types";
 
+const handlers = {
+  [ADD_TODO]: (state, { title }) => ({
+    ...state,
+    todoList: [...state.todoList, { id: Date.now().toString(), title }],
+  }),
+  [REMOVE_TODO]: (state, { id }) => ({
+    ...state,
+    todoList: state.todoList.filter((todoItem) => todoItem.id !== id),
+  }),
+  [UPDATE_TODO]: (state, { title, id }) => ({
+    ...state,
+    todoList: state.todoList.map((todoItem) => {
+      if (todoItem.id === id) {
+        todoItem.title = title;
+      }
+      return todoItem;
+    }),
+  }),
+  DEFAULT: (state) => state,
+};
+
 export const todoReducer = (state, action) => {
-  switch (action.type) {
-    case ADD_TODO:
-      return {
-        ...state,
-        todoList: [
-          ...state.todoList,
-          { id: Date.now().toString(), title: action.title },
-        ],
-      };
-    case REMOVE_TODO:
-      return {
-        ...state,
-        todoList: state.todoList.filter(
-          (todoItem) => todoItem.id !== action.id
-        ),
-      };
-    case UPDATE_TODO:
-      return {
-        ...state,
-        todoList: state.todoList.map((todoItem) => {
-          if (todoItem.id === action.id) {
-            todoItem.title = action.title;
-          }
-          return todoItem;
-        }),
-      };
-    default:
-      return state;
-  }
+  const handler = handlers[action.type] || handlers.DEFAULT;
+  return handler(state, action);
 };

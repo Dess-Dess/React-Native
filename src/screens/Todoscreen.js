@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import { THEME } from "../theme";
@@ -6,13 +6,21 @@ import { AppCard } from "../ui/AppCard";
 import { EditModal } from "../components/EditModal";
 import { AppTextBold } from "../ui/AppTextBold";
 import { AppButton } from "../ui/AppButton";
+import { TodoContext } from "../context/todo/todoContext";
+import { ScreenContext } from "../context/screen/screenContext";
 
-export const Todoscreen = ({ goBack, todo, removeTodoItem, onSave }) => {
+export const Todoscreen = () => {
+  const { todoList, updateTodo, removeTodoItem } = useContext(TodoContext);
+  const { todoId, change_screen } = useContext(ScreenContext);
   const [isVisible, setVisible] = useState(false);
+
+  const todo = todoList.find((t) => t.id === todoId);
+
   const SaveHandler = (title) => {
-    onSave(todo.id, title);
+    updateTodo(todo.id, title);
     setVisible(false);
   };
+
   return (
     <View>
       <EditModal
@@ -32,14 +40,17 @@ export const Todoscreen = ({ goBack, todo, removeTodoItem, onSave }) => {
       </AppCard>
       <View style={styles.buttons}>
         <View style={styles.button}>
-          <AppButton onPress={goBack} backgroundColor={THEME.GREY_COLOR}>
+          <AppButton
+            onPress={() => change_screen(null)}
+            backgroundColor={THEME.GREY_COLOR}
+          >
             <AntDesign name="back" size={20} />
-          </AppButton> 
+          </AppButton>
         </View>
         <View style={styles.button}>
           <AppButton
             backgroundColor={THEME.DANGER_COLOR}
-            onPress={removeTodoItem}
+            onPress={() => removeTodoItem(todo.id)}
           >
             <FontAwesome name="remove" size={20} />
           </AppButton>
@@ -55,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    width: Dimensions.get('window').width/3,
+    width: Dimensions.get("window").width / 3,
   },
   title: {
     fontSize: 24,
