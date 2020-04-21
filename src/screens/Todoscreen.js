@@ -16,8 +16,8 @@ export const Todoscreen = () => {
 
   const todo = todoList.find((t) => t.id === todoId);
 
-  const SaveHandler = (title) => {
-    updateTodo(todo.id, title);
+  const SaveHandler = async(title) => {
+    await updateTodo(todo.id, title);
     setVisible(false);
   };
 

@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
     borderBottomColor: THEME.MAIN_COLOR,
     padding: 10,
     fontFamily: "porcelain-regular",
-    fontSize: 24,
+    fontSize: 16,
   },
 });

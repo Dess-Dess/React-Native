@@ -8,6 +8,6 @@ export const AppText = (props) => (
 const styles = StyleSheet.create({
   default: {
     fontFamily: "porcelain-regular",
-    fontSize: 24,
+    fontSize: 20,
   },
 });

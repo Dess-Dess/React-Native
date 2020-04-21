@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { Navbar } from "./components/Navbar";
 import { THEME } from "./theme";
@@ -10,7 +10,7 @@ export const MainLayout = () => {
   const { todoId } = useContext(ScreenContext);
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <Navbar title="Todo App"></Navbar>
       <View style={styles.container}>
         {todoId ? <Todoscreen /> : <Mainscreen />}
@@ -22,5 +22,7 @@ export const MainLayout = () => {
 const styles = StyleSheet.create({
   container: {
     padding: THEME.PADDING,
+    flex: 1,
   },
+  wrapper: { flex: 1 },
 });
