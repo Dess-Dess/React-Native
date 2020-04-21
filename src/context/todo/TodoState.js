@@ -80,6 +80,7 @@ export const TodoState = ({ children }) => {
         ...data[key],
         id: key,
       }));
+
       dispatch({ type: FETCH_TODOLIST, todoList });
     } catch (error) {
       showError("Что-то пошло не так...");
